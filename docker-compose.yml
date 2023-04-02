@@ -1,0 +1,27 @@
+version: '1'
+services:
+  postgres:
+    image: "postgres"
+    container_name: regula_sun_postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=regulasun_database      
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./create-tables.sql:/docker-entrypoint-initdb.d/create-tables.sql
+      - ./insert-data-dabatabe.sql:/docker-entrypoint-initdb.d/insert-data-dabatabe.sql
+    env_file:
+      - .env
+
+  pgadmin-compose:
+    image: dpage/pgadmin4
+    container_name: regula_sun_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "iago@teste.com"
+      PGADMIN_DEFAULT_PASSWORD: "123456"
+    ports:
+      - "54321:80"
+    depends_on:
+      - postgres
